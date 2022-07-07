@@ -1,0 +1,156 @@
+<html>
+<head>
+    <script src="tonweb-mnemonic.js"></script>
+    <script src="jszip.js"></script>
+    <script src="FileSaver.js"></script>
+    <script>
+        const tonMnemonic = window.TonWeb.mnemonic;
+        let zip = new JSZip();
+        async function loadMnemonic(text, num_pks) {
+			for (let i = 0; i < num_pks; i++) {
+				let pk = await tonMnemonic.mnemonicToSeed(text, `${i}`);
+				zip.file(`my-wallet-${i}.pk`, Uint8ToBase64(pk), {base64: true});
+
+				const forchecksum = await crypto.subtle.digest('SHA-256', pk);
+				const forchecksum16 = Array.from(new Uint16Array(forchecksum));
+				let checksum_word1 = tonMnemonic.wordlists.EN[forchecksum16[0] & 2047];
+				let checksum_word2 = tonMnemonic.wordlists.EN[forchecksum16[1] & 2047];
+				zip.file(`checksum-${i}.txt`, `${checksum_word1} ${checksum_word2}`, {base64: false});
+			}
+
+			zip.generateAsync({type:"blob"})
+			.then(function(content) {
+				saveAs(content, "my-wallets.zip");
+			});
+
+			// document.querySelector('#checksum').innerText = `Checksum: ${checksum}`;
+        }
+
+        function isWordInList(word) {
+            let foundArr = tonMnemonic.wordlists.EN.filter((it)=> {
+                return it == word;
+            })
+            return foundArr.length > 0;
+        }
+
+        window.addEventListener("load", async ()=> {
+
+            document.querySelector('#load-btn').addEventListener('click', async () => {
+                let textRaw = document.querySelector('#words').value;
+                let num_pks = document.querySelector('#num-pks').value;
+                textRaw = textRaw.replaceAll('\n', ' ');
+                const text = textRaw.split(' ');
+
+                let anyWordIsNotInList = false;
+                let badWordIndex = -1;
+                text.forEach( (it, i)=> {
+                    if(!isWordInList(it)) {
+                        anyWordIsNotInList = true;
+                        badWordIndex = i;
+                    }
+                })
+                if(anyWordIsNotInList) {
+                    document.querySelector('#validation-error').innerText = `Mnemonic error: word "${text[badWordIndex]}" is not in the word list`;
+                    return;
+                }
+
+                if( text.length !== 24) {
+                    document.querySelector('#validation-error').innerText = 'Mnemonic error: number of words should be 24';
+                    return;
+                }
+
+                if (! await tonMnemonic.validateMnemonic(text)) {
+                    document.querySelector('#validation-error').innerText = 'Mnemonic error: checksum failed';
+                    return;
+                }
+
+                loadMnemonic(text, num_pks);
+            });
+
+            document.querySelector('#gen-seed-btn').addEventListener('click', async ()=> {
+                const mnemonic = await tonMnemonic.generateMnemonic();
+                document.querySelector('#words').value = mnemonic.join(' ');
+            });
+        })
+
+        function Uint8ToBase64(u8Arr){
+            var CHUNK_SIZE = 0x8000; //arbitrary number
+            var index = 0;
+            var length = u8Arr.length;
+            var result = '';
+            var slice;
+            while (index < length) {
+                slice = u8Arr.subarray(index, Math.min(index + CHUNK_SIZE, length));
+                result += String.fromCharCode.apply(null, slice);
+                index += CHUNK_SIZE;
+            }
+
+
+
+            document.querySelector('#validation-error').innerText = '';
+            return btoa(result);
+        }
+
+
+    </script>
+    <style>
+        body {
+            padding: 20px;
+            font-size: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        button {
+            border: 1px solid rgb(105, 105, 105);
+            padding: 6px 10px;
+            margin: 7px;
+            font-size: 18px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 10px auto;
+        }
+
+        #validation-error {
+            color:red;
+            line-height: 2;
+            min-height: 40px;
+        }
+        #binary-data {
+            font-size: 14px;
+            line-height: 2;
+            min-height: 20px;
+        }
+        #checksum {
+            line-height: 2;
+        }
+        a {
+            text-decoration:cornflowerblue;
+        }
+        a:hover {
+            text-decoration:underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+            <h2>TON Offline Multi Mnemonic Tool</h2>
+            <br>
+            <b>1.</b> Enter your 24 word mnemonic:
+            <br><br>
+            <textarea name="" id="words" cols="30" rows="10"></textarea>
+            <br>
+            or <button id="gen-seed-btn">Generate New Mnemonic</button>
+            <br>
+            <div id="validation-error"></div>
+            <br>
+            <b>2.</b> Enter number of private keys to generate:
+            <br><br>
+            <div><textarea name="" id="num-pks" cols="10"></textarea></div>
+            <br><br>
+            <b>3.</b> Convert 24 word mnemonic to private keys:
+            <br><br>
+            <button id="load-btn">Download my-wallets.zip</button>
+            <br>
+        </div>
+    </body>
+    </html>
