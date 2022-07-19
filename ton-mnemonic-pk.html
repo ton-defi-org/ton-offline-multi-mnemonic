@@ -6,16 +6,17 @@
     <script>
         const tonMnemonic = window.TonWeb.mnemonic;
         let zip = new JSZip();
-        async function loadMnemonic(text, num_pks) {
-			for (let i = 0; i < num_pks; i++) {
-				let pk = await tonMnemonic.mnemonicToSeed(text, `${i}`);
+        async function loadMnemonic(text, num_pks, pk_start, derivation_path) {
+
+			for (let i = pk_start; i < num_pks; i++) {
+				let pk = await tonMnemonic.mnemonicToSeed(text, `${derivation_path}-${i}`);
 				zip.file(`my-wallet-${i}.pk`, Uint8ToBase64(pk), {base64: true});
 
 				const forchecksum = await crypto.subtle.digest('SHA-256', pk);
 				const forchecksum16 = Array.from(new Uint16Array(forchecksum));
 				let checksum_word1 = tonMnemonic.wordlists.EN[forchecksum16[0] & 2047];
 				let checksum_word2 = tonMnemonic.wordlists.EN[forchecksum16[1] & 2047];
-				zip.file(`checksum-${i}.txt`, `${checksum_word1} ${checksum_word2}`, {base64: false});
+				// zip.file(`checksum-${i}.txt`, `${checksum_word1} ${checksum_word2}`, {base64: false});
 			}
 
 			zip.generateAsync({type:"blob"})
@@ -38,6 +39,9 @@
             document.querySelector('#load-btn').addEventListener('click', async () => {
                 let textRaw = document.querySelector('#words').value;
                 let num_pks = document.querySelector('#num-pks').value;
+                let pk_start = document.querySelector('#pk-start').value;
+                let derivation_path = document.querySelector('#derivation-path').value;
+
                 textRaw = textRaw.replaceAll('\n', ' ');
                 const text = textRaw.split(' ');
 
@@ -64,7 +68,7 @@
                     return;
                 }
 
-                loadMnemonic(text, num_pks);
+                loadMnemonic(text, num_pks, pk_start, derivation_path);
             });
 
             document.querySelector('#gen-seed-btn').addEventListener('click', async ()=> {
@@ -143,9 +147,17 @@
             <br>
             <div id="validation-error"></div>
             <br>
+            <b>2.</b> Enter Derivation Path:
+            <br><br>
+            <div><textarea name="" id="derivation-path" cols="10"></textarea></div>
+            <br><br>
             <b>2.</b> Enter number of private keys to generate:
             <br><br>
             <div><textarea name="" id="num-pks" cols="10"></textarea></div>
+            <br><br>
+            <b>3.</b> Enter start pk index:
+            <br><br>
+            <div><textarea name="" id="pk-start" cols="10"></textarea></div>
             <br><br>
             <b>3.</b> Convert 24 word mnemonic to private keys:
             <br><br>
