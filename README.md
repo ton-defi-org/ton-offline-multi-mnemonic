@@ -12,6 +12,7 @@ This tool uses tonweb-mnemonic to convert the mnemonic to multiple seeds by usin
 ### How to use
 1. Download and copy this library to a secured computer (preferably without internet connection)
 2. Open ton-mnemonic-pk.html
-2. Enter 24 word mnemonic or use the 'Generate New Mnemonic' button.
-3. Enter the number of pks to generate.
-4. Covert the mnemonic to pks and download zip files.
+3. Enter 24 word mnemonic or use the 'Generate New Mnemonic' button.
+4. Enter derivation path. Different derivation paths will result with different private keys.
+5. Enter number of private keys to generate and pk start index.
+6. Covert the mnemonic to pks and download zip files.
