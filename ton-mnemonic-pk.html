@@ -5,12 +5,11 @@
     <script src="FileSaver.js"></script>
     <script>
         const tonMnemonic = window.TonWeb.mnemonic;
-        let zip = new JSZip();
-        async function loadMnemonic(text, num_pks, pk_start, derivation_path) {
 
-			const pk_end = Number(pk_start) + Number(num_pks)
+        async function loadMnemonic(text, num_pks, pk_start, derivation_path) {
+	        let zip = new JSZip();
+			const pk_end = pk_start + num_pks
 			for (let i = pk_start; i < pk_end; i++) {
-				console.log(pk_start, pk_end, num_pks, i)
 				let pk = await tonMnemonic.mnemonicToSeed(text, `${derivation_path}-${i}`);
 				zip.file(`my-wallet-${i}.pk`, Uint8ToBase64(pk), {base64: true});
 
@@ -42,8 +41,8 @@
 
             document.querySelector('#load-btn').addEventListener('click', async () => {
                 let textRaw = document.querySelector('#words').value;
-                let num_pks = document.querySelector('#num-pks').value;
-                let pk_start = document.querySelector('#pk-start').value;
+                let num_pks = Number(document.querySelector('#num-pks').value);
+                let pk_start = Number(document.querySelector('#pk-start').value);
                 let derivation_path = document.querySelector('#derivation-path').value;
 
 				if (pk_start < 0) {
