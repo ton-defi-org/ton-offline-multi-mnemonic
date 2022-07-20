@@ -25,7 +25,7 @@ Generate 10 pks starting from index 0 with a given mnemonic:
 - number of private keys: 10 <br/>
 - start index: 0 <br/>
 
-If you want to generate 5 more pks using the smae mnemonic and the same derivation path you can do the following:
+If you want to generate 5 more pks using the same mnemonic and the same derivation path you can do the following:
 - mnemonic: "remind trim update similar device behind exhibit attitude video gap broccoli cable fly pioneer ostrich hill tuna bamboo fortune admit tornado equip fitness verify" <br/>
 - derivation path: example/0 <br/>
 - number of private keys: 5 <br/>
