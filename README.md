@@ -25,13 +25,13 @@ This tool uses tonweb-mnemonic to convert the mnemonic to multiple seeds by usin
 - number of private keys: 10 <br/>
 - start index: 0 <br/>
 
-2. If you want to generate 5 more pks using the same mnemonic and the same derivation path you can do the following:
+2. Generate 5 more pks using the same mnemonic and the same derivation path:
 - mnemonic: "remind trim update similar device behind exhibit attitude video gap broccoli cable fly pioneer ostrich hill tuna bamboo fortune admit tornado equip fitness verify" <br/>
 - derivation path: example/0 <br/>
 - number of private keys: 5 <br/>
 - start index: 10 <br/>
 
-3. If you want to use the same mnemonic and generate 10 different pks starting from index 0, use different derivation path:
+3. Use the same mnemonic and generate 10 new different pks starting from index 0, use different derivation path:
 - mnemonic: "remind trim update similar device behind exhibit attitude video gap broccoli cable fly pioneer ostrich hill tuna bamboo fortune admit tornado equip fitness verify" <br/>
 - derivation path: example/1 <br/>
 - number of private keys: 10 <br/>
