@@ -39,4 +39,4 @@ If you want to use the same mnemonic and generate 10 different pks starting from
 
 <br/>
 
-![img_2.png](img_2.png)
+![img.png](img.png)
