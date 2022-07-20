@@ -8,7 +8,9 @@
         let zip = new JSZip();
         async function loadMnemonic(text, num_pks, pk_start, derivation_path) {
 
-			for (let i = pk_start; i < num_pks; i++) {
+			const pk_end = Number(pk_start) + Number(num_pks)
+			for (let i = pk_start; i < pk_end; i++) {
+				console.log(pk_start, pk_end, num_pks, i)
 				let pk = await tonMnemonic.mnemonicToSeed(text, `${derivation_path}-${i}`);
 				zip.file(`my-wallet-${i}.pk`, Uint8ToBase64(pk), {base64: true});
 
