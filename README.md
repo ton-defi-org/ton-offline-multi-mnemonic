@@ -15,7 +15,7 @@ This tool uses tonweb-mnemonic to convert the mnemonic to multiple seeds by usin
 3. Enter 24 word mnemonic or use the 'Generate New Mnemonic' button
 4. Enter derivation path. Different derivation paths will generate different private keys
 5. Enter number of private keys to generate and pk start index. Can be useful if you want to generate more pks
-6. Covert the mnemonic to pks and download zip files
+6. Covert the mnemonic to pks and download zip file
 7. The 2-checksum words can be stored and used later to validate the mnemonic correctness
 
 #### Examples:
