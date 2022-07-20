@@ -44,6 +44,16 @@
                 let pk_start = document.querySelector('#pk-start').value;
                 let derivation_path = document.querySelector('#derivation-path').value;
 
+				if (pk_start < 0) {
+                    document.querySelector('#pk-start-validation-error').innerText = `Error: index should be greater than or equal to zero`;
+                    return;
+				}
+
+				if (num_pks <= 0) {
+                    document.querySelector('#num-pks-validation-error').innerText = `Error: number of private keys to generate should be greater than zero`;
+                    return;
+				}
+
                 textRaw = textRaw.replaceAll('\n', ' ');
                 const text = textRaw.split(' ');
 
@@ -121,6 +131,16 @@
             line-height: 2;
             min-height: 40px;
         }
+        #pk-start-validation-error {
+            color:red;
+            line-height: 2;
+            min-height: 40px;
+        }
+        #num-pks-validation-error {
+            color:red;
+            line-height: 2;
+            min-height: 40px;
+        }
         #binary-data {
             font-size: 14px;
             line-height: 2;
@@ -156,14 +176,16 @@
             <b>3.</b> Enter number of private keys to generate:
             <br><br>
             <div><textarea name="" id="num-pks" cols="10"></textarea></div>
+			<div id="num-pks-validation-error"></div>
             <br><br>
-            <b>4.</b> Enter pk start index:
+            <b>4.</b> Enter private key start index:
             <br><br>
             <div><textarea name="" id="pk-start" cols="10"></textarea></div>
+			<div id="pk-start-validation-error"></div>
             <br><br>
             <b>5.</b> Convert 24 word mnemonic to private keys:
             <br><br>
-             <div id="checksum"></div>
+			<div id="checksum"></div>
             <button id="load-btn">Download my-wallets.zip</button>
             <br>
         </div>
