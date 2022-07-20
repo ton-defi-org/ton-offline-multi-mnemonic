@@ -1,4 +1,4 @@
-# Mnemonic code converter
+# TON Offline Multi Mnemonic Code Converter
 Use single mnemonic to create multiple pks.
 
 For security reasons the mnemonic should be stored in cold wallet.
@@ -12,10 +12,10 @@ This tool uses tonweb-mnemonic to convert the mnemonic to multiple seeds by usin
 ### How to use
 1. Download and copy this library to a secured computer (preferably without internet connection)
 2. Open ton-mnemonic-pk.html
-3. Enter 24 word mnemonic or use the 'Generate New Mnemonic' button.
-4. Enter derivation path. Different derivation paths will generate different private keys.
-5. Enter number of private keys to generate and pk start index. Can be useful if you want to generate more pks.
-6. Covert the mnemonic to pks and download zip files.
+3. Enter 24 word mnemonic or use the 'Generate New Mnemonic' button
+4. Enter derivation path. Different derivation paths will generate different private keys
+5. Enter number of private keys to generate and pk start index. Can be useful if you want to generate more pks
+6. Covert the mnemonic to pks and download zip files
 7. The 2-checksum words can be stored and used later to validate the mnemonic you entered is correct
 
 #### Examples:
@@ -36,3 +36,7 @@ If you want to use the same mnemonic and generate 10 different pks starting from
 - derivation path: example/1 <br/>
 - number of private keys: 10 <br/>
 - start index: 0 <br/>
+
+<br/>
+
+![img_2.png](img_2.png)
